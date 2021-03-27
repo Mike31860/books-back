@@ -52,23 +52,35 @@ public class BooksController {
   }
 
   @DeleteMapping("{id}")
-  public void removeBook(@PathVariable("id") String bookId) {
-    books.remove(bookId);
+  public void removeBook(@PathVariable("id") String bookId) throws Exception{
+	  if(bookId != null && books.containsKey(bookId)) {
+			 books.remove(bookId);
+		 }else {
+			  throw new Exception();
+		  }
   }
 
   @PostMapping("")
-  public BookDto saveBook(@RequestBody BookDto dto) {
-    var id = UUID.randomUUID().toString();
+  public BookDto saveBook(@RequestBody BookDto dto) throws Exception {
+	  if(dto.getAuthor() != null && dto.getName() != null) {
+		   var id = UUID.randomUUID().toString();
 
-    books.put(id, new Book(dto.getName(), dto.getAuthor()));
+		   books.put(id, new Book(dto.getName(), dto.getAuthor()));
 
-    return new BookDto(id, dto.getName(), dto.getAuthor());
+		   return new BookDto(id, dto.getName(), dto.getAuthor());
+	   }else {
+		  throw new Exception();
+	   }
   }
 
   @PutMapping("{id}")
-  public BookDto updateBook(@PathVariable("id") String bookId, @RequestBody BookDto dto) {
-    books.put(bookId, new Book(dto.getName(), dto.getAuthor()));
+  public BookDto updateBook(@PathVariable("id") String bookId, @RequestBody BookDto dto)throws Exception {
+	  if(dto.getAuthor() != null && dto.getName() != null) {
+		  books.put(bookId, new Book(dto.getName(), dto.getAuthor()));
 
-    return new BookDto(bookId, dto.getName(), dto.getAuthor());
+		  return new BookDto(bookId, dto.getName(), dto.getAuthor());
+	 }else {
+    	 throw new Exception();
+     }
   }
 }
